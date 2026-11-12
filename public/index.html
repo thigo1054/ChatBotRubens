@@ -1,97 +1,135 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Silva & Associados | Advocacia</title>
+  <title>Dra. Lex | Tire suas Dúvidas Jurídicas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+  <script>
+    // Aplica o tema salvo (ou o do sistema) antes de renderizar para não piscar a tela
+    (function () {
+      const saved = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.setAttribute("data-theme", saved || (prefersDark ? "dark" : "light"));
+    })();
+  </script>
 </head>
 <body>
-  <header class="nav">
-    <div class="container nav-inner">
-      <a href="#" class="logo">⚖️ Silva <span>&</span> Associados</a>
-      <nav>
-        <a href="#areas">Áreas</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#contato">Contato</a>
-        <a href="#chat" class="btn btn-sm">Fale com a Dra. Lex</a>
-      </nav>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="container hero-inner">
-      <div>
-        <h1>Justiça com <em>clareza</em> e compromisso.</h1>
-        <p>Tire suas dúvidas jurídicas 24h com nossa assistente virtual, baseada em inteligência artificial e na legislação brasileira.</p>
-        <a href="#chat" class="btn">Iniciar conversa</a>
+  <div class="app">
+    <!-- Barra superior simples e direta -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">⚖️</div>
+        <div>
+          <h1>Dra. Lex</h1>
+          <p class="status"><span class="dot"></span> Tira-dúvidas jurídico rápido e gratuito</p>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <section id="areas" class="container section">
-    <h2>Áreas de atuação</h2>
-    <div class="cards">
-      <div class="card"><span>👷</span><h3>Trabalhista</h3><p>Rescisões, horas extras, assédio e direitos do trabalhador.</p></div>
-      <div class="card"><span>👨‍👩‍👧</span><h3>Família</h3><p>Divórcio, guarda, pensão alimentícia e inventário.</p></div>
-      <div class="card"><span>🛒</span><h3>Consumidor</h3><p>Cobranças indevidas, produtos com defeito e negativação.</p></div>
-      <div class="card"><span>🏠</span><h3>Civil</h3><p>Contratos, indenizações, imóveis e responsabilidade civil.</p></div>
-      <div class="card"><span>🚔</span><h3>Criminal</h3><p>Defesa em inquéritos e processos criminais.</p></div>
-      <div class="card"><span>🧓</span><h3>Previdenciário</h3><p>Aposentadorias, BPC/LOAS e auxílios do INSS.</p></div>
-    </div>
-  </section>
+      <div class="actions">
+        <button type="button" id="font-btn" class="action-btn" title="Aumentar ou diminuir o tamanho da letra" aria-label="Alterar tamanho da letra">
+          <span class="action-icon">🔠</span>
+          <span class="action-label" id="font-label">Letra maior</span>
+        </button>
 
-  <section id="chat" class="section chat-section">
-    <div class="container">
-      <h2>Assistente Jurídica Virtual</h2>
-      <p class="sub">Converse com a <strong>Dra. Lex</strong>. As respostas são informativas e não substituem a consulta com um advogado.</p>
+        <button type="button" id="theme-btn" class="action-btn" title="Alternar entre modo claro e escuro" aria-label="Alternar tema claro ou escuro">
+          <span class="action-icon" id="theme-icon">🌙</span>
+          <span class="action-label" id="theme-label">Modo escuro</span>
+        </button>
 
-      <div class="chat">
-        <div class="chat-header">
-          <div class="avatar">⚖️</div>
-          <div>
-            <strong>Dra. Lex</strong>
-            <small><span class="dot"></span> Online</small>
-          </div>
-          <button id="reset" title="Nova conversa">↺ Nova conversa</button>
-        </div>
-
-        <div id="messages" class="messages">
-          <div class="msg bot"><div class="bubble">Olá! 👋 Sou a <strong>Dra. Lex</strong>, assistente virtual do escritório Silva & Associados. Como posso ajudar você hoje?</div></div>
-        </div>
-
-        <div class="suggestions" id="suggestions">
-          <button>Fui demitido sem justa causa, quais meus direitos?</button>
-          <button>Como funciona a pensão alimentícia?</button>
-          <button>Comprei um produto com defeito, o que fazer?</button>
-        </div>
-
-        <form id="form" class="chat-input">
-          <textarea id="input" rows="1" placeholder="Digite sua dúvida jurídica..." required></textarea>
-          <button type="submit" id="send">Enviar ➤</button>
-        </form>
+        <button type="button" id="reset" class="action-btn action-reset" title="Apagar conversa e começar de novo">
+          <span class="action-icon">🔄</span>
+          <span class="action-label">Nova conversa</span>
+        </button>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <section id="sobre" class="container section about">
-    <h2>Sobre o escritório</h2>
-    <p>Há mais de 20 anos oferecendo assessoria jurídica com ética, transparência e atendimento humanizado. Unimos a experiência de nossos advogados à tecnologia para tornar o Direito mais acessível.</p>
-  </section>
+    <!-- Área principal do chat -->
+    <main class="chat-area" id="messages" aria-live="polite">
+      <!-- Tela de boas-vindas (aparece no início e some ou fica no topo) -->
+      <section class="welcome" id="welcome">
+        <div class="welcome-badge">👋 Olá! Eu sou a <strong>Dra. Lex</strong></div>
+        <h2>Qual é a sua dúvida sobre os seus direitos?</h2>
+        <p>Explico tudo em uma linguagem simples e sem complicação. Escolha um assunto abaixo ou escreva sua pergunta:</p>
 
-  <footer id="contato">
-    <div class="container footer-inner">
-      <div><strong>⚖️ Silva & Associados</strong><p>Av. Paulista, 1000 – São Paulo/SP</p></div>
-      <div><p>📞 (11) 99999-9999</p><p>✉️ contato@silvaassociados.com.br</p></div>
-    </div>
-    <p class="copy">© 2026 Silva & Associados. Projeto acadêmico.</p>
-  </footer>
+        <div class="topics" id="suggestions" role="group" aria-label="Exemplos de perguntas">
+          <button type="button" class="topic-card" data-question="Comprei um produto com defeito ou me arrependi da compra. Quais são os meus direitos?">
+            <span class="topic-emoji">🛒</span>
+            <div class="topic-text">
+              <strong>Direito do Consumidor</strong>
+              <span>Produto com defeito, cobrança indevida ou nome sujo</span>
+            </div>
+          </button>
+
+          <button type="button" class="topic-card" data-question="Fui demitido sem justa causa. O que eu tenho direito a receber na rescisão?">
+            <span class="topic-emoji">👷</span>
+            <div class="topic-text">
+              <strong>Direitos Trabalhistas</strong>
+              <span>Demissão, férias, FGTS, horas extras e carteira</span>
+            </div>
+          </button>
+
+          <button type="button" class="topic-card" data-question="Como funciona a pensão alimentícia, guarda dos filhos ou divórcio no Brasil?">
+            <span class="topic-emoji">👨‍👩‍👧</span>
+            <div class="topic-text">
+              <strong>Família e Pensão</strong>
+              <span>Pensão alimentícia, divórcio, guarda e herança</span>
+            </div>
+          </button>
+
+          <button type="button" class="topic-card" data-question="Quais são as regras atuais para aposentadoria, auxílio-doença ou BPC/LOAS no INSS?">
+            <span class="topic-emoji">🧓</span>
+            <div class="topic-text">
+              <strong>INSS e Aposentadoria</strong>
+              <span>Aposentadoria, auxílio-doença e benefício BPC/LOAS</span>
+            </div>
+          </button>
+
+          <button type="button" class="topic-card" data-question="Tenho dúvidas sobre contrato de aluguel, despejo ou problemas com vizinhos. Como a lei funciona?">
+            <span class="topic-emoji">🏠</span>
+            <div class="topic-text">
+              <strong>Aluguel e Moradia</strong>
+              <span>Contratos de aluguel, imóveis e vizinhança</span>
+            </div>
+          </button>
+
+          <button type="button" class="topic-card" data-question="Caí em um golpe pela internet ou no Pix. O que devo fazer imediatamente para tentar recuperar meu dinheiro?">
+            <span class="topic-emoji">🛡️</span>
+            <div class="topic-text">
+              <strong>Golpes e Internet</strong>
+              <span>Golpe do Pix, compras falsas e boletim de ocorrência</span>
+            </div>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Rodapé com caixa de pergunta grande e fácil de usar -->
+    <footer class="composer-wrap">
+      <form id="form" class="composer">
+        <label for="input" class="sr-only">Escreva sua dúvida aqui</label>
+        <textarea
+          id="input"
+          rows="1"
+          placeholder="Escreva sua dúvida aqui... (Ex: Meu chefe atrasou meu salário, o que fazer?)"
+          required
+        ></textarea>
+        <button type="submit" id="send" class="send-btn">
+          <span>Perguntar</span>
+          <span class="send-arrow" aria-hidden="true">➤</span>
+        </button>
+      </form>
+      <p class="disclaimer">
+        ℹ️ As respostas são educativas e baseadas na lei brasileira. Para processos ou casos urgentes, consulte um advogado ou a <strong>Defensoria Pública (disque 129)</strong>.
+      </p>
+    </footer>
+  </div>
 
   <script src="app.js"></script>
 </body>
 </html>
-
