@@ -11,7 +11,6 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
   <script>
-    // Aplica o tema salvo (ou o do sistema) antes de renderizar para não piscar a tela
     (function () {
       const saved = localStorage.getItem("theme");
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -21,13 +20,13 @@
 </head>
 <body>
   <div class="app">
-    <!-- Barra superior simples e direta -->
+    <!-- Barra superior compacta -->
     <header class="topbar">
       <div class="brand">
         <div class="brand-icon" aria-hidden="true">⚖️</div>
-        <div>
+        <div class="brand-text">
           <h1>Dra. Lex</h1>
-          <p class="status"><span class="dot"></span> Tira-dúvidas jurídico rápido e gratuito</p>
+          <p class="status"><span class="dot"></span> Tira-dúvidas jurídico gratuito</p>
         </div>
       </div>
 
@@ -42,7 +41,7 @@
           <span class="action-label" id="theme-label">Modo escuro</span>
         </button>
 
-        <button type="button" id="reset" class="action-btn action-reset" title="Apagar conversa e começar de novo">
+        <button type="button" id="reset" class="action-btn action-reset" title="Apagar conversa e começar de novo" aria-label="Nova conversa">
           <span class="action-icon">🔄</span>
           <span class="action-label">Nova conversa</span>
         </button>
@@ -51,81 +50,91 @@
 
     <!-- Área principal do chat -->
     <main class="chat-area" id="messages" aria-live="polite">
-      <!-- Tela de boas-vindas (aparece no início e some ou fica no topo) -->
+      <!-- Mensagem inicial curta + Aba recolhível de dúvidas rápidas -->
       <section class="welcome" id="welcome">
-        <div class="welcome-badge">👋 Olá! Eu sou a <strong>Dra. Lex</strong></div>
-        <h2>Qual é a sua dúvida sobre os seus direitos?</h2>
-        <p>Explico tudo em uma linguagem simples e sem complicação. Escolha um assunto abaixo ou escreva sua pergunta:</p>
+        <div class="msg bot">
+          <div class="msg-avatar" aria-hidden="true">⚖️</div>
+          <div class="bubble">
+            Olá! 👋 Sou a <strong>Dra. Lex</strong>. Explico seus direitos de forma simples e rápida. Escreva sua pergunta abaixo ou abra a aba de <strong>dúvidas comuns</strong>:
+          </div>
+        </div>
 
-        <div class="topics" id="suggestions" role="group" aria-label="Exemplos de perguntas">
-          <button type="button" class="topic-card" data-question="Comprei um produto com defeito ou me arrependi da compra. Quais são os meus direitos?">
-            <span class="topic-emoji">🛒</span>
-            <div class="topic-text">
-              <strong>Direito do Consumidor</strong>
-              <span>Produto com defeito, cobrança indevida ou nome sujo</span>
-            </div>
+        <div class="topics-drawer" id="topics-drawer">
+          <button type="button" class="topics-toggle" id="topics-toggle" aria-expanded="false">
+            <span>💡 Ver exemplos de dúvidas comuns</span>
+            <span class="chevron" id="topics-chevron" aria-hidden="true">▾</span>
           </button>
 
-          <button type="button" class="topic-card" data-question="Fui demitido sem justa causa. O que eu tenho direito a receber na rescisão?">
-            <span class="topic-emoji">👷</span>
-            <div class="topic-text">
-              <strong>Direitos Trabalhistas</strong>
-              <span>Demissão, férias, FGTS, horas extras e carteira</span>
-            </div>
-          </button>
+          <div class="topics" id="suggestions" role="group" aria-label="Exemplos de perguntas" hidden>
+            <button type="button" class="topic-card" data-question="Comprei um produto com defeito ou me arrependi da compra. Quais são os meus direitos?">
+              <span class="topic-emoji">🛒</span>
+              <div class="topic-text">
+                <strong>Direito do Consumidor</strong>
+                <span>Produto com defeito, cobrança indevida ou nome sujo</span>
+              </div>
+            </button>
 
-          <button type="button" class="topic-card" data-question="Como funciona a pensão alimentícia, guarda dos filhos ou divórcio no Brasil?">
-            <span class="topic-emoji">👨‍👩‍👧</span>
-            <div class="topic-text">
-              <strong>Família e Pensão</strong>
-              <span>Pensão alimentícia, divórcio, guarda e herança</span>
-            </div>
-          </button>
+            <button type="button" class="topic-card" data-question="Fui demitido sem justa causa. O que eu tenho direito a receber na rescisão?">
+              <span class="topic-emoji">👷</span>
+              <div class="topic-text">
+                <strong>Direitos Trabalhistas</strong>
+                <span>Demissão, férias, FGTS, horas extras e carteira</span>
+              </div>
+            </button>
 
-          <button type="button" class="topic-card" data-question="Quais são as regras atuais para aposentadoria, auxílio-doença ou BPC/LOAS no INSS?">
-            <span class="topic-emoji">🧓</span>
-            <div class="topic-text">
-              <strong>INSS e Aposentadoria</strong>
-              <span>Aposentadoria, auxílio-doença e benefício BPC/LOAS</span>
-            </div>
-          </button>
+            <button type="button" class="topic-card" data-question="Como funciona a pensão alimentícia, guarda dos filhos ou divórcio no Brasil?">
+              <span class="topic-emoji">👨‍👩‍👧</span>
+              <div class="topic-text">
+                <strong>Família e Pensão</strong>
+                <span>Pensão alimentícia, divórcio, guarda e herança</span>
+              </div>
+            </button>
 
-          <button type="button" class="topic-card" data-question="Tenho dúvidas sobre contrato de aluguel, despejo ou problemas com vizinhos. Como a lei funciona?">
-            <span class="topic-emoji">🏠</span>
-            <div class="topic-text">
-              <strong>Aluguel e Moradia</strong>
-              <span>Contratos de aluguel, imóveis e vizinhança</span>
-            </div>
-          </button>
+            <button type="button" class="topic-card" data-question="Quais são as regras atuais para aposentadoria, auxílio-doença ou BPC/LOAS no INSS?">
+              <span class="topic-emoji">🧓</span>
+              <div class="topic-text">
+                <strong>INSS e Aposentadoria</strong>
+                <span>Aposentadoria, auxílio-doença e benefício BPC/LOAS</span>
+              </div>
+            </button>
 
-          <button type="button" class="topic-card" data-question="Caí em um golpe pela internet ou no Pix. O que devo fazer imediatamente para tentar recuperar meu dinheiro?">
-            <span class="topic-emoji">🛡️</span>
-            <div class="topic-text">
-              <strong>Golpes e Internet</strong>
-              <span>Golpe do Pix, compras falsas e boletim de ocorrência</span>
-            </div>
-          </button>
+            <button type="button" class="topic-card" data-question="Tenho dúvidas sobre contrato de aluguel, despejo ou problemas com vizinhos. Como a lei funciona?">
+              <span class="topic-emoji">🏠</span>
+              <div class="topic-text">
+                <strong>Aluguel e Moradia</strong>
+                <span>Contratos de aluguel, imóveis e vizinhança</span>
+              </div>
+            </button>
+
+            <button type="button" class="topic-card" data-question="Caí em um golpe pela internet ou no Pix. O que devo fazer imediatamente para tentar recuperar meu dinheiro?">
+              <span class="topic-emoji">🛡️</span>
+              <div class="topic-text">
+                <strong>Golpes e Internet</strong>
+                <span>Golpe do Pix, compras falsas e boletim de ocorrência</span>
+              </div>
+            </button>
+          </div>
         </div>
       </section>
     </main>
 
-    <!-- Rodapé com caixa de pergunta grande e fácil de usar -->
+    <!-- Rodapé com caixa de pergunta limpa e sem rolagem no placeholder -->
     <footer class="composer-wrap">
       <form id="form" class="composer">
-        <label for="input" class="sr-only">Escreva sua dúvida aqui</label>
+        <label for="input" class="sr-only">Digite sua dúvida</label>
         <textarea
           id="input"
           rows="1"
-          placeholder="Escreva sua dúvida aqui... (Ex: Meu chefe atrasou meu salário, o que fazer?)"
+          placeholder="Digite sua dúvida..."
           required
         ></textarea>
-        <button type="submit" id="send" class="send-btn">
-          <span>Perguntar</span>
+        <button type="submit" id="send" class="send-btn" aria-label="Enviar pergunta">
+          <span class="send-label">Perguntar</span>
           <span class="send-arrow" aria-hidden="true">➤</span>
         </button>
       </form>
       <p class="disclaimer">
-        ℹ️ As respostas são educativas e baseadas na lei brasileira. Para processos ou casos urgentes, consulte um advogado ou a <strong>Defensoria Pública (disque 129)</strong>.
+        ℹ️ Orientação educativa. Para processos, procure um advogado ou a <strong>Defensoria Pública (129)</strong>.
       </p>
     </footer>
   </div>

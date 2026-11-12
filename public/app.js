@@ -1,5 +1,7 @@
 const messagesEl = document.getElementById("messages");
 const welcomeEl = document.getElementById("welcome");
+const topicsDrawer = document.getElementById("topics-drawer");
+const topicsToggle = document.getElementById("topics-toggle");
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 const sendBtn = document.getElementById("send");
@@ -44,6 +46,19 @@ fontBtn.addEventListener("click", () => {
   const isLarge = document.documentElement.getAttribute("data-large-font") !== "true";
   localStorage.setItem("largeFont", String(isLarge));
   updateFontUI(isLarge);
+});
+
+/* ==========================================================================
+   Aba recolhível de dúvidas comuns
+   ========================================================================== */
+function setTopicsOpen(open) {
+  topicsToggle.setAttribute("aria-expanded", String(open));
+  suggestions.hidden = !open;
+}
+
+topicsToggle.addEventListener("click", () => {
+  const isOpen = topicsToggle.getAttribute("aria-expanded") === "true";
+  setTopicsOpen(!isOpen);
 });
 
 /* ==========================================================================
@@ -95,16 +110,22 @@ function showTyping() {
   return msg;
 }
 
+function resetInputHeight() {
+  input.style.height = "";
+  input.style.overflowY = "hidden";
+}
+
 async function sendMessage(text) {
   text = text.trim();
   if (!text) return;
 
-  // Esconde os cartões iniciais após a primeira pergunta para dar foco à conversa
-  if (welcomeEl) welcomeEl.style.display = "none";
+  // Fecha e esconde a aba de exemplos quando a conversa começa
+  setTopicsOpen(false);
+  if (topicsDrawer) topicsDrawer.style.display = "none";
 
   addMessage("user", text);
   input.value = "";
-  input.style.height = "auto";
+  resetInputHeight();
   sendBtn.disabled = true;
   const typing = showTyping();
 
@@ -153,8 +174,14 @@ input.addEventListener("keydown", (e) => {
 });
 
 input.addEventListener("input", () => {
+  if (!input.value) {
+    resetInputHeight();
+    return;
+  }
   input.style.height = "auto";
-  input.style.height = input.scrollHeight + "px";
+  const nextHeight = Math.min(input.scrollHeight, 120);
+  input.style.height = nextHeight + "px";
+  input.style.overflowY = input.scrollHeight > 120 ? "auto" : "hidden";
 });
 
 // Clique nos cartões de temas frequentes
@@ -165,11 +192,15 @@ suggestions.querySelectorAll(".topic-card").forEach((btn) =>
   })
 );
 
-// Botão "Nova conversa": limpa as mensagens e mostra novamente os cartões de temas
+// Botão "Nova conversa": limpa as mensagens e mostra novamente o botão da aba de exemplos
 resetBtn.addEventListener("click", () => {
   previousInteractionId = null;
   sessionStorage.removeItem("interactionId");
-  messagesEl.querySelectorAll(".msg").forEach((el) => el.remove());
-  if (welcomeEl) welcomeEl.style.display = "block";
+  // Remove todas as mensagens fora do bloco de boas-vindas
+  Array.from(messagesEl.children).forEach((el) => {
+    if (el !== welcomeEl) el.remove();
+  });
+  if (topicsDrawer) topicsDrawer.style.display = "block";
+  setTopicsOpen(false);
   input.focus();
 });
