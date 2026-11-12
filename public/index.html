@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Silva & Associados | Advocacia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="logo">⚖️ Silva <span>&</span> Associados</a>
+      <nav>
+        <a href="#areas">Áreas</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+        <a href="#chat" class="btn btn-sm">Fale com a Dra. Lex</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <h1>Justiça com <em>clareza</em> e compromisso.</h1>
+        <p>Tire suas dúvidas jurídicas 24h com nossa assistente virtual, baseada em inteligência artificial e na legislação brasileira.</p>
+        <a href="#chat" class="btn">Iniciar conversa</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="areas" class="container section">
+    <h2>Áreas de atuação</h2>
+    <div class="cards">
+      <div class="card"><span>👷</span><h3>Trabalhista</h3><p>Rescisões, horas extras, assédio e direitos do trabalhador.</p></div>
+      <div class="card"><span>👨‍👩‍👧</span><h3>Família</h3><p>Divórcio, guarda, pensão alimentícia e inventário.</p></div>
+      <div class="card"><span>🛒</span><h3>Consumidor</h3><p>Cobranças indevidas, produtos com defeito e negativação.</p></div>
+      <div class="card"><span>🏠</span><h3>Civil</h3><p>Contratos, indenizações, imóveis e responsabilidade civil.</p></div>
+      <div class="card"><span>🚔</span><h3>Criminal</h3><p>Defesa em inquéritos e processos criminais.</p></div>
+      <div class="card"><span>🧓</span><h3>Previdenciário</h3><p>Aposentadorias, BPC/LOAS e auxílios do INSS.</p></div>
+    </div>
+  </section>
+
+  <section id="chat" class="section chat-section">
+    <div class="container">
+      <h2>Assistente Jurídica Virtual</h2>
+      <p class="sub">Converse com a <strong>Dra. Lex</strong>. As respostas são informativas e não substituem a consulta com um advogado.</p>
+
+      <div class="chat">
+        <div class="chat-header">
+          <div class="avatar">⚖️</div>
+          <div>
+            <strong>Dra. Lex</strong>
+            <small><span class="dot"></span> Online</small>
+          </div>
+          <button id="reset" title="Nova conversa">↺ Nova conversa</button>
+        </div>
+
+        <div id="messages" class="messages">
+          <div class="msg bot"><div class="bubble">Olá! 👋 Sou a <strong>Dra. Lex</strong>, assistente virtual do escritório Silva & Associados. Como posso ajudar você hoje?</div></div>
+        </div>
+
+        <div class="suggestions" id="suggestions">
+          <button>Fui demitido sem justa causa, quais meus direitos?</button>
+          <button>Como funciona a pensão alimentícia?</button>
+          <button>Comprei um produto com defeito, o que fazer?</button>
+        </div>
+
+        <form id="form" class="chat-input">
+          <textarea id="input" rows="1" placeholder="Digite sua dúvida jurídica..." required></textarea>
+          <button type="submit" id="send">Enviar ➤</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre" class="container section about">
+    <h2>Sobre o escritório</h2>
+    <p>Há mais de 20 anos oferecendo assessoria jurídica com ética, transparência e atendimento humanizado. Unimos a experiência de nossos advogados à tecnologia para tornar o Direito mais acessível.</p>
+  </section>
+
+  <footer id="contato">
+    <div class="container footer-inner">
+      <div><strong>⚖️ Silva & Associados</strong><p>Av. Paulista, 1000 – São Paulo/SP</p></div>
+      <div><p>📞 (11) 99999-9999</p><p>✉️ contato@silvaassociados.com.br</p></div>
+    </div>
+    <p class="copy">© 2026 Silva & Associados. Projeto acadêmico.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
